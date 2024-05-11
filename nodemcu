@@ -1,0 +1,62 @@
+#include <ESP8266WiFi.h>
+#include <ESP8266HTTPClient.h>
+#include <WiFiClient.h>
+const char* ssid     = "Replace with your SSID name";
+const char* password = "Replace with your SSID password";
+const char* serverName = "http://Replace with your server's IPv4 address /sensordata/post-esp-data.php"; 
+String apiKeyValue = "tPmAT5Ab3j7F9";
+String sensorName = "MQ6";
+const int gasPin = A0; 
+const int threshold = 800;
+void setup() {
+  Serial.begin(115200);
+  WiFi.begin(ssid, password);
+  Serial.println("Connecting");
+  while(WiFi.status() != WL_CONNECTED) { 
+    delay(500);
+    Serial.print(".");
+  }
+  Serial.println("");
+  Serial.print("Connected to WiFi network with IP Address: ");
+  Serial.println(WiFi.localIP());
+}
+void loop() {
+   int sensorValue = analogRead(gasPin);
+   Serial.print("Sensor Value: ");
+   Serial.println(sensorValue);
+
+  String stageStatus;
+  if (sensorValue > threshold) {
+    Serial.println("Gas leakage detected!");
+    stageStatus = "Gas leakage detected!";
+  } else {
+    Serial.println("No gas leakage detected");
+    stageStatus = "No gas leakage detected";
+  }
+  if(WiFi.status()== WL_CONNECTED){
+    WiFiClient client; 
+    HTTPClient http;
+    if(http.begin(client, serverName)){
+      http.addHeader("Content-Type", "application/x-www-form-urlencoded");
+      String httpRequestData = "api_key=" + apiKeyValue + "&sensor=" + sensorName
+                             + "&value1=" + String(sensorValue)+ "&Sstatus="+ stageStatus ;
+      Serial.print("httpRequestData: ");
+      Serial.println(httpRequestData);
+      int httpResponseCode = http.POST(httpRequestData);
+      if (httpResponseCode == 200) {
+          Serial.println("Server response: ");
+          Serial.println(http.getString());
+      } else {
+          Serial.print("Error code: ");
+          Serial.println(httpResponseCode);
+      }
+      http.end();
+    } else {
+      Serial.println("Failed to connect to server");
+    }
+  }
+  else {
+    Serial.println("WiFi Disconnected");
+  }
+  delay(15000);  
+}
