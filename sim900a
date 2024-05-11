@@ -45,7 +45,7 @@ void SendMessage(String message)
   SIM900A.println("AT+CMGF=1");   
   delay(1000);
   Serial.println ("Set SMS Number");
-  SIM900A.println("AT+CMGS=\"+919136847088\"\r"); 
+  SIM900A.println("AT+CMGS=\"+919696969696\"\r"); 
   delay(1000);
   Serial.println ("Set SMS Content");
   SIM900A.println(message);
