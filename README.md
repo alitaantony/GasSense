@@ -2,9 +2,9 @@
 
 ## ARDUINO UNO R3, MQ-6 SENSOR, GSM SIM900A AND BUZZER CONNECTIONS 
 ### MQ-6 Sensor (MQ6) to Arduino Uno R3 (AUR) 
-   (MQ6) Vcc -> 5V (AUR)
-   (MQ6) GND -> GND (AUR)
-   (MQ6) Analog Out A0 -> A0 (AUR)
+   1. (MQ6) Vcc -> 5V (AUR)
+   2. (MQ6) GND -> GND (AUR)
+   3. (MQ6) Analog Out A0 -> A0 (AUR)
    Power Arduino using USB programming port or DC Jack
 
 ### SIM900A (S9A) to Arduino UNO R3 (AUR) 
